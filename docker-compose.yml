@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  yamul-gateway:
+    build:
+      context: .
+      dockerfile: ./gateway.Dockerfile
+    ports:
+      - "2593:2593"
+  yamul-backend:
+    build:
+      context: .
+      dockerfile: ./backend.Dockerfile
+    ports:
+      - "8087:8087"
+      - "8088:8088"
+      - "8089:8089"

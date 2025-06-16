@@ -25,7 +25,7 @@ func Setup() {
 	setHandler(0x9b, helpRequest)
 	setHandler(0xa0, serverSelected)
 	setHandler(0xad, unicodeSpeechRequestHandler)
-	setHandler(0xb5, openChatWindow)
+	setHandler(0xb5, handler_openChatWindow)
 	setHandler(0xbd, receiveClientVersion)
 	setHandler(0xbf, receiveGenericCommand)
 	setHandler(0xc8, clientViewRange)
