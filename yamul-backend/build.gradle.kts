@@ -1,20 +1,26 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.apache.tools.ant.taskdefs.condition.Os
 
 plugins {
-    kotlin("jvm") version "1.9.0"
+    kotlin("jvm") version "2.1.21"
     id("com.google.protobuf") version "0.9.4"
     id("com.github.sherter.google-java-format") version "0.9"
     id("io.gitlab.arturbosch.detekt") version "1.23.1"
     id("org.springframework.boot") version "3.1.2"
     id("io.spring.dependency-management") version "1.1.2"
-    kotlin("plugin.spring") version "1.9.0"
+    kotlin("plugin.spring") version "2.1.21"
     application
 }
 
 group = "dev.cavefish.yamul"
 version = "1.0-SNAPSHOT"
+val protocPlatform = if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+    "windows-x86_64"
+} else {
+    "linux-x86_64"
+}
 val grpcVersion = "1.54.1"
 val grpcKotlinVersion = "1.3.0" // CURRENT_GRPC_KOTLIN_VERSION
 val protobufVersion = "3.24.0"
@@ -28,6 +34,7 @@ repositories {
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
 
@@ -53,20 +60,20 @@ tasks.test {
 }
 
 kotlin {
-    jvmToolchain(19)
+    jvmToolchain(21)
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_19
+    sourceCompatibility = JavaVersion.VERSION_21
 }
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:$protobufVersion"
+        artifact = "com.google.protobuf:protoc:$protobufVersion:$protocPlatform"
     }
     plugins {
         create("grpc") {
-            artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion"
+            artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion:$protocPlatform"
         }
         create("grpckt") {
             artifact = "io.grpc:protoc-gen-grpc-kotlin:$grpcKotlinVersion:jdk8@jar"

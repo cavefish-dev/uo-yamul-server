@@ -1,6 +1,5 @@
 package dev.cavefish.yamul.backend.infra.localfile
 
-import org.tinylog.kotlin.Logger
 import java.io.RandomAccessFile
 import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
@@ -12,7 +11,7 @@ class PlainMultimaFileReader(private val filename: String) : MultimaFileReader {
 
     init {
         val fileLocation = LocalMulFileLocation.getFileLocation(filename)
-        assert(fileLocation != null) {"Cannot access $filename"}
+        requireNotNull(fileLocation, { "Cannot access $filename" })
         file = RandomAccessFile(fileLocation, "r")
         channel = file.channel
     }
