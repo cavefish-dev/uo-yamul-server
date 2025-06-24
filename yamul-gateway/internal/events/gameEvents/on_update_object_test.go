@@ -1,6 +1,7 @@
 package gameEvents
 
 import (
+	"github.com/stretchr/testify/assert"
 	"math"
 	"reflect"
 	"testing"
@@ -34,6 +35,7 @@ func Test_toCommandUpdateObject(t *testing.T) {
 				Hue:           0,
 				Flags:         0,
 				NotorietyFlag: 0,
+				Items:         []commands.UpdateObjectItem{},
 			},
 		},
 	}
@@ -82,6 +84,7 @@ func Test_toCommandUpdateObject1(t *testing.T) {
 				Hue:           7,
 				Flags:         8,
 				NotorietyFlag: 9,
+				Items:         []commands.UpdateObjectItem{},
 			},
 		},
 		{
@@ -111,14 +114,15 @@ func Test_toCommandUpdateObject1(t *testing.T) {
 				Hue:           math.MaxUint16,
 				Flags:         0xFF,
 				NotorietyFlag: 0xFF,
+				Items:         []commands.UpdateObjectItem{},
 			},
 		},
 	}
+	assert := assert.New(t)
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := toCommandUpdateObject(tt.args.object); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("toCommandUpdateObject() = %v, want %v", got, tt.want)
-			}
+			got := toCommandUpdateObject(tt.args.object)
+			assert.EqualValues(tt.want, got)
 		})
 	}
 }

@@ -1,8 +1,8 @@
 package gameEvents
 
 import (
+	"github.com/stretchr/testify/assert"
 	"math"
-	"reflect"
 	"testing"
 	"yamul-gateway/backend/services"
 	"yamul-gateway/internal/dtos/commands"
@@ -44,7 +44,7 @@ func Test_mapToHealthBarUpdate(t *testing.T) {
 				},
 			}},
 			want: commands.HealthBarUpdate{
-				Serial: 0,
+				Serial: math.MaxUint32,
 				Values: []commands.HealthBarUpdateValues{
 					{
 						Type:    commands.HealthBarUpdateValues_Green,
@@ -58,11 +58,11 @@ func Test_mapToHealthBarUpdate(t *testing.T) {
 			},
 		},
 	}
+	assert := assert.New(t)
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := mapToHealthBarUpdate(tt.args.body); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("mapToHealthBarUpdate() = %v, want %v", got, tt.want)
-			}
+			got := mapToHealthBarUpdate(tt.args.body)
+			assert.EqualValues(tt.want, got)
 		})
 	}
 }
