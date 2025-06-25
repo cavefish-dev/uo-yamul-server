@@ -12,17 +12,3 @@ func TrimRight(str string) string {
 		i--
 	}
 }
-
-func RightPaddingByte(str string, length int) []byte {
-	var result = make([]byte, length)
-	var i = 0
-	for i < length && i < len(str) {
-		result[i] = str[i]
-		i++
-	}
-	for i < length {
-		result[i] = 0
-		i++
-	}
-	return result
-}

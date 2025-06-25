@@ -1,6 +1,7 @@
 package autoconfig
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"yamul-gateway/backend/services"
@@ -16,10 +17,14 @@ func TestModuleSetup(t *testing.T) {
 		{
 			name: "ModuleSetup", expectedError: nil,
 		},
+		{
+			name: "ModuleSetupLoginError", expectedError: fmt.Errorf("login module setup error"),
+		},
 	}
 	for _, tt := range tests {
 		loginModuleMock := &mockedModule{}
 		login.Module = loginModuleMock
+		loginModuleMock.setupReturn = tt.expectedError
 		t.Run(tt.name, func(t *testing.T) {
 			var assertions = assert.New(t)
 			err := Setup()

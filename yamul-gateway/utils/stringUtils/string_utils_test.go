@@ -19,6 +19,13 @@ func TestTrimRight(t *testing.T) {
 			want: "hello world",
 		},
 		{
+			name: "empty case",
+			args: args{
+				str: "",
+			},
+			want: "",
+		},
+		{
 			name: "left trim",
 			args: args{
 				str: "\x00hello world",
