@@ -4,9 +4,11 @@ import (
 	"context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"testing"
 	backendServices "yamul-gateway/backend/services"
 	"yamul-gateway/internal/dtos/commands"
 	"yamul-gateway/internal/interfaces"
+	"yamul-gateway/internal/services/login/mocks"
 )
 
 type LoginService struct {
@@ -15,6 +17,7 @@ type LoginService struct {
 }
 
 var service *LoginService
+var serviceInterface LoginServiceInterface
 
 var Module interfaces.Module = module{}
 
@@ -23,7 +26,18 @@ type module struct{}
 func (m module) Setup() error {
 	var err error
 	service, err = newLoginService()
+	serviceInterface = service
 	return err
+}
+
+func MockSetup(t *testing.T) *mocks.LoginServiceMock {
+	mock := mocks.CreateLoginServiceMock(t)
+	serviceInterface = mock
+	return mock
+}
+
+func MockClose() {
+	serviceInterface = nil
 }
 
 func (m module) Close() {
@@ -37,10 +51,12 @@ func newLoginService() (*LoginService, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &LoginService{
+	service := &LoginService{
 		dial:   dial,
 		client: backendServices.NewLoginServiceClient(dial),
-	}, nil
+	}
+	var _ LoginServiceInterface = service
+	return service, nil
 }
 
 func (s LoginService) close() {

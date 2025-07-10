@@ -10,12 +10,16 @@ import (
 )
 
 type ClientConnectionWriteBufferMock struct {
-	assert           *assert.Assertions
-	mutexIsLocked    bool
-	mutexAlreadyUsed bool
-	buffer           []byte
-	usedBufferLength int
-	logger           interfaces.Logger
+	assert                     *assert.Assertions
+	mutexIsLocked              bool
+	mutexAlreadyUsed           bool
+	buffer                     []byte
+	usedBufferLength           int
+	logger                     interfaces.Logger
+	loginDetails               *dtos.LoginDetails
+	createGameConnectionResult error
+	gameConnectionCreated      int
+	mockedGameService          interfaces.GameService
 }
 
 func (c *ClientConnectionWriteBufferMock) Close() {
@@ -108,7 +112,8 @@ func (c *ClientConnectionWriteBufferMock) SetLogin(username string, password str
 }
 
 func (c *ClientConnectionWriteBufferMock) CreateGameConnection() error {
-	panic("Unimplemented mock behaviour")
+	c.gameConnectionCreated++
+	return c.createGameConnectionResult
 }
 
 func (c *ClientConnectionWriteBufferMock) KillConnection(err error) {
@@ -132,7 +137,10 @@ func (c *ClientConnectionWriteBufferMock) GetEncryptionState() *dtos.EncryptionC
 }
 
 func (c *ClientConnectionWriteBufferMock) GetLoginDetails() *dtos.LoginDetails {
-	panic("Unimplemented mock behaviour")
+	if c.loginDetails == nil {
+		panic("Unimplemented mock behaviour")
+	}
+	return c.loginDetails
 }
 
 func (c *ClientConnectionWriteBufferMock) GetConnection() net.Conn {
@@ -140,7 +148,10 @@ func (c *ClientConnectionWriteBufferMock) GetConnection() net.Conn {
 }
 
 func (c *ClientConnectionWriteBufferMock) GetGameService() interfaces.GameService {
-	panic("Unimplemented mock behaviour")
+	if c.mockedGameService == nil {
+		panic("Unimplemented mock behaviour")
+	}
+	return c.mockedGameService
 }
 
 func (c *ClientConnectionWriteBufferMock) AssertSentBuffer(expected []byte) {
@@ -151,6 +162,22 @@ func (c *ClientConnectionWriteBufferMock) AssertSentBuffer(expected []byte) {
 func (c *ClientConnectionWriteBufferMock) AssertDeclaredLength(lengthPosition uint16) {
 	var expectedLength = uint16(c.buffer[lengthPosition])<<8 | uint16(c.buffer[lengthPosition+1])
 	c.assert.EqualValues(expectedLength, uint16(c.usedBufferLength))
+}
+
+func (c *ClientConnectionWriteBufferMock) MockLoginDetails(loginDetails *dtos.LoginDetails) {
+	c.loginDetails = loginDetails
+}
+
+func (c *ClientConnectionWriteBufferMock) MockCreateGameConnection(e error) {
+	c.createGameConnectionResult = e
+}
+
+func (c *ClientConnectionWriteBufferMock) AssertCreatedGameCollection(i int) {
+	c.assert.Equal(i, c.gameConnectionCreated)
+}
+
+func (c *ClientConnectionWriteBufferMock) MockGameService(mockGameService interfaces.GameService) {
+	c.mockedGameService = mockGameService
 }
 
 func CreateClientConnectionWriteBufferMock(t *testing.T) *ClientConnectionWriteBufferMock {

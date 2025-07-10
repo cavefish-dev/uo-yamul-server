@@ -7,7 +7,7 @@ import (
 )
 
 func ValidateLogin(username string, password string) (bool, commands.LoginDeniedReason) {
-	return service.CheckUserCredentials(username, password)
+	return serviceInterface.CheckUserCredentials(username, password)
 }
 
 func DenyLogin(client interfaces.ClientConnection, deniedReason commands.LoginDeniedReason) {
