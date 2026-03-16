@@ -1,10 +1,10 @@
-# (PACKAGE_CODE) PACKAGE_NAME
+# (0xNN) PACKET_NAME
 
-Description of the package.
+Description of the packet and when it is used.
 
 ## Message format
 
 Offset | Type | Name | Description
 --- | --- | --- | ---
-0 | uint8_t | field1 | Description of field1
-1 | uint16_t | field2 | Description of field2
+`0x00` | `BYTE` | `cmd` | Command code, always `0xNN`
+`0x01` | `USHORT` | `field2` | Description of field2

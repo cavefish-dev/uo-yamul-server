@@ -27,11 +27,15 @@ Description of the packet and when it is used.
 
 Offset | Type | Name | Description
 --- | --- | --- | ---
-0 | uint8_t | cmd | Command code, always 0xNN
+0x00 | BYTE | cmd | Command code, always 0xNN
 ...
 ```
 
 File naming convention: `0xNN_description.md` (e.g., `0x01_disconnect.md`).
+
+### Type names
+
+Packet docs use the **UO wire type names** from the WolfPAck reference site (BYTE, USHORT, UINT, etc.). See [`types.md`](ultima/transport/types.md) for the mapping to Go types and the `ClientConnection` read/write methods.
 
 ## MUL Hex Patterns (`mulHexPat/`)
 

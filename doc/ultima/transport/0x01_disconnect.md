@@ -6,5 +6,5 @@ This is a message sent from client to server when the user chooses to return to 
 
 Offset | Type | Name | Description
 --- | --- | --- | ---
-0 | uint8_t | cmd | Command code, always 0x01
-1 | uint8_t[4] | pattern | Pattern used for validation, always 0xFF 0xFF 0xFF 0xFF
+`0x00` | `BYTE` | `cmd` | Command code, always `0x01`
+`0x01` | `BYTE[4]` | `pattern` | Pattern used for validation, always `0xFF` `0xFF` `0xFF` `0xFF`

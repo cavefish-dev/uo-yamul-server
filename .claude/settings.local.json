@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(find:*)",
-      "Bash(head:*)"
+      "Bash(head:*)",
+      "WebFetch(domain:www.hoogi.de)"
     ]
   }
 }
