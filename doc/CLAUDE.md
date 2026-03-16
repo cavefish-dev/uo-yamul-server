@@ -8,13 +8,14 @@ This `doc/` folder contains reference documentation for two aspects of the Ultim
 
 - **`mulHexPat/`** — [ImHex](https://imhex.werwolv.net/) pattern files for inspecting UO binary MUL/UOP data files
 - **`ultima/transport/`** — Markdown documentation for UO client↔server network packet formats
+- **`ultima/files/`** — Markdown documentation for UO data file formats
 
 ## Transport Packet Docs (`ultima/transport/`)
 
 Each file documents one UO protocol packet. Use `template.md` as the template when adding new packet docs.
 
 Reference sites for packet formats include:
-- [WolfPAck UO Protocol Documentation](https://www.hoogi.de/wolfpack/wiki/doku.php?id=uo_protocol)
+- [WolfPack UO Protocol Documentation](https://www.hoogi.de/wolfpack/wiki/doku.php?id=uo_protocol)
 
 ### Template format
 
@@ -33,9 +34,20 @@ Offset | Type | Name | Description
 
 File naming convention: `0xNN_description.md` (e.g., `0x01_disconnect.md`).
 
+
+## Ultima Online File Formats
+
+Each file in `ultima/files/` documents one UO data format (e.g., `tiledata.mul`, UOP container files). These are primarily for use with the ImHex patterns in `mulHexPat/` and the corresponding parsing code in `yamul-backend/src/main/kotlin/.../game/controller/domain/mul/`. Use `template.md` as the template when adding new file format docs.
+
+Reference sites for UO file formats include:
+- [Heptazane UO File Formats](https://uo.stratics.com/heptazane/fileformats.shtml#3.17)
+
+
 ### Type names
 
 Packet docs use the **UO wire type names** from the WolfPAck reference site (BYTE, USHORT, UINT, etc.). See [`types.md`](ultima/transport/types.md) for the mapping to Go types and the `ClientConnection` read/write methods.
+
+File format docs use the **Heptazane type names** (BYTE, UBYTE, WORD, UWORD, DWORD, UDWORD, CHAR). See [`ultima/files/types.md`](ultima/files/types.md) for sizes and the 16-bit color format.
 
 ## MUL Hex Patterns (`mulHexPat/`)
 

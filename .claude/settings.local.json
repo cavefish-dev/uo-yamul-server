@@ -3,7 +3,8 @@
     "allow": [
       "Bash(find:*)",
       "Bash(head:*)",
-      "WebFetch(domain:www.hoogi.de)"
+      "WebFetch(domain:www.hoogi.de)",
+      "WebFetch(domain:uo.stratics.com)"
     ]
   }
 }
