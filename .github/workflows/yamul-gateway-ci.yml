@@ -6,8 +6,14 @@ name: yamul-gateway-ci
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'yamul-gateway/**'
+      - 'api-definitions/**'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'yamul-gateway/**'
+      - 'api-definitions/**'
 
 jobs:
 
