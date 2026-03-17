@@ -16,7 +16,9 @@ Each file documents one UO protocol packet. Use `template.md` as the template wh
 
 Reference sites for packet formats include:
 - [WolfPack UO Protocol Documentation](https://www.hoogi.de/wolfpack/wiki/doku.php?id=uo_protocol)
-
+- [RunUO Packet Handlers](https://raw.githubusercontent.com/runuo/runuo/refs/heads/master/Server/Network/PacketHandlers.cs)
+- [SphereServer Receive.cpp](https://raw.githubusercontent.com/Sphereserver/Source-X/refs/heads/master/src/network/receive.cpp)
+- [SphereServer Send.cpp](https://raw.githubusercontent.com/Sphereserver/Source-X/refs/heads/master/src/network/send.cpp)
 ### Template format
 
 ```markdown
@@ -41,6 +43,7 @@ Each file in `ultima/files/` documents one UO data format (e.g., `tiledata.mul`,
 
 Reference sites for UO file formats include:
 - [Heptazane UO File Formats](https://uo.stratics.com/heptazane/fileformats.shtml#3.17)
+- [SphereServer UO Files parsing code](https://github.com/Sphereserver/Source-X/tree/master/src/game/uo_files)
 
 
 ### Type names
