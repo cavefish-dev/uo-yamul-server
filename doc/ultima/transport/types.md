@@ -1,6 +1,6 @@
 # UO Wire Types
 
-This file maps UO protocol type names (as used in the packet documentation on this site and the [WolfPAck reference](https://www.hoogi.de/wolfpack/wiki/doku.php?id=uo_protocol)) to their Go equivalents in the gateway.
+This file maps UO protocol type names (as used in the packet documentation on this site and the [WolfPack reference](https://www.hoogi.de/wolfpack/wiki/doku.php?id=uo_protocol)) to their Go equivalents in the gateway.
 
 All multi-byte values use **big-endian (network) byte order**.
 
