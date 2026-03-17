@@ -17,6 +17,6 @@ Offset | Type | Name | Description
 -- A comment describing the packet contents
 NN 01 00 ...
 
--- Another package example (add an empty line between examples)
+-- Another packet example (add an empty line between examples)
 NN 02 00 ...
 ```
