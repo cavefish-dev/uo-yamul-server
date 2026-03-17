@@ -9,7 +9,12 @@
       "Bash(wc:*)",
       "WebFetch(domain:github.com)",
       "Bash(grep -E '\\\\.\\(sh|ps1|bat\\)$')",
-      "Bash(grep -l \"TODO\\\\|FIXME\\\\|XXX\\\\|HACK\\\\|unimplemented\\\\|Unimplemented\" internal/transport/multima/handlers/*.go)"
+      "Bash(grep -l \"TODO\\\\|FIXME\\\\|XXX\\\\|HACK\\\\|unimplemented\\\\|Unimplemented\" internal/transport/multima/handlers/*.go)",
+      "Bash(go build:*)",
+      "Bash(go test:*)",
+      "Bash(GRPC_GO_LOG_VERBOSITY_LEVEL=99 GRPC_GO_LOG_SEVERITY_LEVEL=INFO go test:*)",
+      "Bash(go clean:*)",
+      "Bash(GRPC_GO_LOG_VERBOSITY_LEVEL=99 GRPC_GO_LOG_SEVERITY_LEVEL=info go test -tags integration -v -timeout 30s ./integration/...)"
     ]
   }
 }

@@ -25,3 +25,12 @@ func Setup() error {
 func Close() {
 	login.Module.Close()
 }
+
+func ResetLoginModule() error {
+	login.Module.Close()
+	return login.Module.Setup()
+}
+
+func CloseLoginModule() {
+	login.Module.Close()
+}

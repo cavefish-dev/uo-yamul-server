@@ -6,6 +6,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"io"
+	"os"
 	"sync/atomic"
 	backendServices "yamul-gateway/backend/services"
 	"yamul-gateway/internal/interfaces"
@@ -13,17 +14,24 @@ import (
 	"yamul-gateway/internal/services/game/messages"
 )
 
+func gameServiceAddress() string {
+	if addr := os.Getenv("YAMUL_GAME_ADDR"); addr != "" {
+		return addr
+	}
+	return "localhost:8089"
+}
+
 func CreateGameService(connection interfaces.ClientConnection) (interfaces.GameService, error) {
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	dial, err := grpc.Dial("localhost:8089", opts...)
+	dial, err := grpc.Dial(gameServiceAddress(), opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	client := backendServices.NewGameServiceClient(dial)
 	ctx := servicesCommon.GetAuthenticatedContext(context.Background(), connection.GetLoginDetails())
-	stream, err := client.OpenGameStream(ctx)
+	stream, err := client.OpenGameStream(ctx, grpc.WaitForReady(true))
 	if err != nil {
 		_ = dial.Close()
 		return nil, err
