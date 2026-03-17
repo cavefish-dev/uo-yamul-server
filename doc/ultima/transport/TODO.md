@@ -2,37 +2,6 @@
 
 Packets below are either stubs (file exists but has no field layout) or not yet documented.
 
-## Not yet fetched (batch E was cancelled)
-
-These packets have no files yet:
-
-- [ ] 0x80 — Login Request
-- [ ] 0x82 — Connect to Game Server
-- [ ] 0x83 — Delete Character
-- [ ] 0x86 — Resend Characters
-- [ ] 0x88 — Paperdoll Info
-- [ ] 0x89 — Corpse Clothing
-- [ ] 0x8c — Connect to Game Server (Relay)
-- [ ] 0x90 — Map Message
-- [ ] 0x91 — Game Server Login
-- [ ] 0x93 — Update Map Pins
-- [ ] 0x95 — Hue Picker
-- [ ] 0x99 — Arrow
-- [ ] 0x9a — Get User Server Prefs
-- [ ] 0x9b — Request Help
-- [ ] 0x9e — Sell List
-- [ ] 0x9f — Sell Items
-- [ ] 0xa0 — Select Server
-- [ ] 0xa1 — Update Current Health
-- [ ] 0xa2 — Update Current Mana
-- [ ] 0xa3 — Update Current Stamina
-- [ ] 0xa4 — Hardware Info
-- [ ] 0xa5 — Open Web Browser
-- [ ] 0xa6 — Tip/Notice Window
-- [ ] 0xa7 — Request Tip/Notice Window
-- [ ] 0xa8 — Server List
-- [ ] 0xa9 — Characters / Starting Locations
-
 ## Stubs (file exists, no field layout)
 
 These were created but had no usable content on the wiki:
@@ -119,6 +88,18 @@ These packet docs have no `## Example packet (hex)` section yet:
 - [ ] 0x78 — Draw Object
 - [ ] 0x7c — Object Picker
 - [ ] 0x7d — Client Response to Dialog
+- [ ] 0x86 — Resend Characters
+- [ ] 0x89 — Corpse Clothing
+- [ ] 0x93 — Open Book (note: was incorrectly listed as "Update Map Pins" in TODO)
+- [ ] 0x9a — ASCII Prompt
+- [ ] 0x9b — Help Request
+- [ ] 0x9e — Sell List
+- [ ] 0x9f — Sell Items
+- [ ] 0xa4 — Hardware Info
+- [ ] 0xa5 — Open Web Browser
+- [ ] 0xa6 — Tip/Notice Window
+- [ ] 0xa8 — Server List
+- [ ] 0xa9 — Characters / Starting Locations
 - [ ] 0xaa — Attack OK
 - [ ] 0xab — Gump Text Entry Dialog
 - [ ] 0xac — Gump Text Entry Dialog Reply
