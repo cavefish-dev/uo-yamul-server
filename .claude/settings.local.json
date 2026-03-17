@@ -5,7 +5,9 @@
       "Bash(head:*)",
       "WebFetch(domain:www.hoogi.de)",
       "WebFetch(domain:uo.stratics.com)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(wc:*)",
+      "WebFetch(domain:github.com)"
     ]
   }
 }

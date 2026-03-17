@@ -2,11 +2,13 @@
 
 Tile attribute definitions for all land and static tiles. Contains 512 land tile groups followed by static tile groups.
 
-Reference: [Heptazane — Section 3.19](https://uo.stratics.com/heptazane/fileformats.shtml#3.19)
+Reference: [Heptazane — Section 3.19](https://uo.stratics.com/heptazane/fileformats.shtml#3.19) · [SphereServer — uo_files/CUOTiledata.h](https://github.com/Sphereserver/Source-X/blob/master/src/game/uo_files/CUOTiledata.h)
 
 ## File structure
 
 Two sections: land tile groups first, then static tile groups. Each group holds 32 tile records preceded by a 4-byte unknown header.
+
+> **High Seas note:** Pre-HS clients use the structures below. HS+ clients expanded both structs. Check file size to detect the variant (see HS variant sections).
 
 ### Land tile group (836 bytes)
 
@@ -22,6 +24,17 @@ Offset | Size | Type | Name | Description
 `0x00` | `4` | `DWORD` | `Flags` | Tile property flags (see flags table)
 `0x04` | `2` | `UWORD` | `TexID` | Texture map ID (`0` = no texture)
 `0x06` | `20` | `CHAR[20]` | `Name` | Tile name (null-padded)
+
+### Land tile record — High Seas variant (30 bytes)
+
+Source: `CUOTerrainTypeRec_HS`
+
+Offset | Size | Type | Name | Description
+--- | --- | --- | --- | ---
+`0x00` | `4` | `DWORD` | `Flags` | Tile property flags (see flags table)
+`0x04` | `2` | `UWORD` | `TexID` | Texture map ID (`0` = no texture)
+`0x06` | `4` | `DWORD` | `Unknown` | Added in HS expansion; purpose unknown
+`0x0A` | `20` | `CHAR[20]` | `Name` | Tile name (null-padded)
 
 ---
 
@@ -48,6 +61,25 @@ Offset | Size | Type | Name | Description
 `0x0E` | `2` | `UWORD` | `Unknown3` | Purpose unknown
 `0x10` | `1` | `UBYTE` | `Height` | Z-height or container capacity
 `0x11` | `20` | `CHAR[20]` | `Name` | Tile name (null-padded)
+
+### Static tile record — High Seas variant (41 bytes)
+
+Source: `CUOItemTypeRec_HS`. `Flags` expands from `DWORD` (4 bytes) to `QWORD` (8 bytes); all subsequent offsets shift by 4.
+
+Offset | Size | Type | Name | Description
+--- | --- | --- | --- | ---
+`0x00` | `8` | `QWORD` | `Flags` | Item property flags (64-bit in HS+)
+`0x08` | `1` | `UBYTE` | `Weight` | Item weight; `255` = immovable
+`0x09` | `1` | `UBYTE` | `Quality` | Layer or light ID depending on tile type
+`0x0A` | `2` | `UWORD` | `Unknown` | Purpose unknown
+`0x0C` | `1` | `UBYTE` | `Unknown1` | Purpose unknown
+`0x0D` | `1` | `UBYTE` | `Quantity` | Class or armor value
+`0x0E` | `2` | `UWORD` | `AnimID` | Body ID; add 50,000 or 60,000 for gump index
+`0x10` | `1` | `UBYTE` | `Unknown2` | Purpose unknown
+`0x11` | `1` | `UBYTE` | `Hue` | Colored light value
+`0x12` | `2` | `UWORD` | `Unknown3` | Purpose unknown
+`0x14` | `1` | `UBYTE` | `Height` | Z-height or container capacity
+`0x15` | `20` | `CHAR[20]` | `Name` | Tile name (null-padded)
 
 ---
 
