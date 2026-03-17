@@ -1,0 +1,184 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run: Gateway",
+      "type": "shell",
+      "command": "go run main.go",
+      "options": {
+        "cwd": "${workspaceFolder}/yamul-gateway"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "label": "Run: Gateway",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Run: Backend",
+      "type": "shell",
+      "command": "./gradlew bootRun",
+      "options": {
+        "cwd": "${workspaceFolder}/yamul-backend"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "label": "Run: Backend",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Run: Dashboard",
+      "type": "shell",
+      "command": "flutter run -d web",
+      "options": {
+        "cwd": "${workspaceFolder}/yamul-dashboard"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "label": "Run: Dashboard",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Run: All Services",
+      "dependsOn": ["Run: Gateway", "Run: Backend", "Run: Dashboard"],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
+    },
+    {
+      "label": "Test: Gateway",
+      "type": "shell",
+      "command": "go test -v ./...",
+      "options": {
+        "cwd": "${workspaceFolder}/yamul-gateway"
+      },
+      "group": "test",
+      "problemMatcher": [],
+      "presentation": {
+        "label": "Test: Gateway",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Test: Backend",
+      "type": "shell",
+      "command": "./gradlew test",
+      "options": {
+        "cwd": "${workspaceFolder}/yamul-backend"
+      },
+      "group": "test",
+      "problemMatcher": [],
+      "presentation": {
+        "label": "Test: Backend",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Test: Dashboard",
+      "type": "shell",
+      "command": "flutter test",
+      "options": {
+        "cwd": "${workspaceFolder}/yamul-dashboard"
+      },
+      "group": "test",
+      "problemMatcher": [],
+      "presentation": {
+        "label": "Test: Dashboard",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Docker Run: Gateway",
+      "type": "shell",
+      "command": "docker build -f gateway.Dockerfile -t yamul-gateway-local . && docker run --rm --name yamul-gateway-local -p 2593:2593 yamul-gateway-local",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "label": "Docker Run: Gateway",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Docker Run: Backend",
+      "type": "shell",
+      "command": "docker build -f backend.Dockerfile -t yamul-backend-local . && docker run --rm --name yamul-backend-local -p 8087:8087 -p 8088:8088 -p 8089:8089 yamul-backend-local",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "label": "Docker Run: Backend",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Docker Stop: Gateway",
+      "type": "shell",
+      "command": "docker stop yamul-gateway-local",
+      "problemMatcher": [],
+      "presentation": {
+        "label": "Docker Stop: Gateway",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Docker Stop: Backend",
+      "type": "shell",
+      "command": "docker stop yamul-backend-local",
+      "problemMatcher": [],
+      "presentation": {
+        "label": "Docker Stop: Backend",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Docker Compose: Up",
+      "type": "shell",
+      "command": "docker-compose up --build",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "label": "Docker Compose: Up",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Run: Backend (Debug JVM)",
+      "type": "shell",
+      "command": "./gradlew bootRun --debug-jvm",
+      "options": {
+        "cwd": "${workspaceFolder}/yamul-backend"
+      },
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "label": "Run: Backend (Debug JVM)",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Docker Compose: Down",
+      "type": "shell",
+      "command": "docker-compose down",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "label": "Docker Compose: Down",
+        "panel": "dedicated"
+      }
+    }
+  ]
+}

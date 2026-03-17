@@ -7,7 +7,8 @@
       "WebFetch(domain:uo.stratics.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(wc:*)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(grep -E '\\\\.\\(sh|ps1|bat\\)$')"
     ]
   }
 }

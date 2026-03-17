@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "golang.go",
+    "Dart-Code.flutter",
+    "Dart-Code.dart-code",
+    "vscjava.vscode-java-pack",
+    "fwcd.kotlin",
+    "ms-azuretools.vscode-docker",
+    "zxh404.vscode-proto3",
+    "redhat.vscode-yaml",
+    "humao.rest-client",
+    "eamodio.gitlens"
+  ]
+}

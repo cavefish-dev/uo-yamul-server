@@ -1,3 +1,17 @@
 {
-    "java.compile.nullAnalysis.mode": "automatic"
+    "java.compile.nullAnalysis.mode": "automatic",
+    "[go]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "golang.go"
+    },
+    "go.formatTool": "goimports",
+    "[dart]": {
+        "editor.formatOnSave": true
+    },
+    "[kotlin]": {
+        "editor.formatOnSave": false
+    },
+    "files.associations": {
+        "*.proto": "proto3"
+    }
 }

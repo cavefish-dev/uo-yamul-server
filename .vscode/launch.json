@@ -1,0 +1,35 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug: Gateway",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/yamul-gateway",
+      "cwd": "${workspaceFolder}/yamul-gateway"
+    },
+    // Prerequisite: run the "Run: Backend (Debug JVM)" task first and wait for Spring Boot startup,
+    // then attach here. The Backend is excluded from the compound launch for this reason.
+    {
+      "name": "Debug: Backend (Attach)",
+      "type": "java",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5005
+    },
+    {
+      "name": "Debug: Dashboard",
+      "type": "dart",
+      "request": "launch",
+      "program": "${workspaceFolder}/yamul-dashboard/lib/main.dart",
+      "deviceId": "web-server"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug: Gateway + Dashboard",
+      "configurations": ["Debug: Gateway", "Debug: Dashboard"]
+    }
+  ]
+}
