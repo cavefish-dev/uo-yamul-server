@@ -20,3 +20,13 @@ Value | Meaning
 --- | ---
 `0x00` | Normal mode
 `0x01` | Fighting / War mode enabled
+
+## Example packet (hex)
+
+```
+-- normal mode (not at war)
+72 00 00 32 00
+
+-- war mode (fighting)
+72 01 00 32 00
+```

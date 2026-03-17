@@ -94,3 +94,34 @@ No detailed field structure documented.
 ## Subcommand 0x000C — Closed Status Gump Notification
 
 No detailed field structure documented.
+
+## Subcommand 0x0019 — Extended Stats
+
+Server message. Reports extended stat information for a character, with two sub-types.
+
+### Sub-type 0x0000 — Dead/Alive flag
+
+Offset | Type | Name | Description
+--- | --- | --- | ---
+`0x05` | `USHORT` | `subtype` | Always `0x0000` for this variant
+`0x07` | `UINT` | `objectID` | Serial of the character
+`0x0B` | `BYTE` | `isDead` | `0xFF` = dead, `0x00` = alive
+
+Total packet size: 11 bytes.
+
+### Sub-type 0x0002 — Attribute lock flags
+
+Offset | Type | Name | Description
+--- | --- | --- | ---
+`0x05` | `USHORT` | `subtype` | Always `0x0002` for this variant
+`0x07` | `UINT` | `objectID` | Serial of the character
+`0x0B` | `BYTE` | `lockFlags` | Bit-packed: bits 5-4=Str lock, 3-2=Dex lock, 1-0=Int lock (2=locked, 1=up, 0=down)
+
+Total packet size: 12 bytes.
+
+## Example packet (hex)
+
+```
+-- subCmd=0x0019 (Dead), objectID=0x1FEF, isDead=true
+BF 00 0B 00 19 00 00 00 1F EF FF
+```

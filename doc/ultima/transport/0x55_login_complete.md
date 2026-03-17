@@ -7,3 +7,10 @@ This is sent by the server to notify the client that the login process is comple
 Offset | Type | Name | Description
 --- | --- | --- | ---
 `0x00` | `BYTE` | `cmd` | Command code, always `0x55`
+
+## Example packet (hex)
+
+```
+-- Login complete signal
+55
+```

@@ -32,3 +32,11 @@ The flag 0xC0 is set in mode if the message contains keyword information.
 ## KeywordInfo structure
 
 KeywordInfo contains 12-bit integers packed into a byte array. The first 12-bit value is the keyword count: `(KeywordInfo[0] << 4) + (KeywordInfo[1] >> 4)`. Subsequent 12-bit values are individual keyword IDs, extracted sequentially using bit-shifting.
+
+## Example packet (hex)
+
+```
+-- mode=0x0D, hue=0x0044, font=3, lang="IVL", text="asd" (unicode)
+AD 00 14 0D 00 44 00 03 49 56 4C 00 00 61 00 73
+00 64 00 00
+```

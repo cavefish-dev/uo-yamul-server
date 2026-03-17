@@ -23,3 +23,12 @@ Offset | Type | Name | Description
 `0x1E` | `BYTE` | `unknown6` | Unknown
 `0x1F` | `USHORT` | `unknown7` | Unknown
 `0x21` | `UINT` | `unknown8` | Unknown
+
+## Example packet (hex)
+
+```
+-- CharID=0x1FEF, body=0x0190, x=0x041D, y=0x0598, z=0xFFAB, direction=East
+1B 00 00 1F EF 00 00 00 00 01 90 04 1D 05 98 FF
+AB 07 00 FF FF FF FF 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00
+```

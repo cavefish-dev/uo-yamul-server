@@ -9,3 +9,10 @@ Offset | Type | Name | Description
 `0x00` | `BYTE` | `cmd` | Command code, always `0x22`
 `0x01` | `BYTE` | `sequence` | Sequence number matching the accepted move request
 `0x02` | `BYTE` | `status` | Player status flags
+
+## Example packet (hex)
+
+```
+-- sequence=0xAB, status=0xCD
+22 AB CD
+```

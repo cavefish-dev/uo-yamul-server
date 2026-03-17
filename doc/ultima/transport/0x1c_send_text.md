@@ -27,3 +27,13 @@ Type | Description
 `0x07` | Message
 `0x08` | Whisper
 `0x09` | Yell
+
+## Example packet (hex)
+
+```
+-- "John Doe" says "Hello World!"
+1C 00 39 00 00 00 01 00 02 03 00 04 00 05 4A 6F
+68 6E 20 44 6F 65 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 48 65 6C 6C
+6F 20 57 6F 72 6C 64 21 00
+```

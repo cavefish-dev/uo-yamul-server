@@ -16,3 +16,10 @@ Value | Description
 `0x00` | Day (full light)
 `0x09` | OSI night
 `0x1F` | Black (maximum darkness)
+
+## Example packet (hex)
+
+```
+-- level=0x18 (dim, not full dark)
+4F 18
+```

@@ -38,3 +38,12 @@ Offset | Type | Name | Description
 `0x53` | `USHORT` | `minDamage` | Minimum damage dealt
 `0x55` | `USHORT` | `maxDamage` | Maximum damage dealt
 `0x57` | `UINT` | `tithingPoints` | Tithing points balance
+
+## Example packet (hex)
+
+```
+-- CharID=0x1FEF, name="asdf", HP=45/45, minimal display
+11 00 2B 00 00 1F EF 61 73 64 66 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 2D 00 2D 00 00
+```

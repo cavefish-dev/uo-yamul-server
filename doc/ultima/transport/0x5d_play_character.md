@@ -12,3 +12,14 @@ Offset | Type | Name | Description
 `0x23` | `CHAR[30]` | `password` | Character password
 `0x41` | `UINT` | `slot` | Character slot position in the character list
 `0x45` | `UINT` | `key` | User's encryption key
+
+## Example packet (hex)
+
+```
+-- name="asdf", password="test", slot=0x01020304, key=0x0100007F
+5D ED ED ED ED 61 73 64 66 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 74 65 73 74 00 00 00 00 00 00 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 01 02 03 04 01 00 00 7F
+```
