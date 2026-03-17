@@ -19,9 +19,9 @@ All multi-byte values use **big-endian (network) byte order**.
 | INT | 4 | `int32` | Signed 32-bit integer, big-endian |
 | UINT | 4 | `uint32` | Unsigned 32-bit integer, big-endian; read via `ReadUInt()` |
 
-## Go `ClientConnection` interface
+## Go `ClientConnection` interface (read/write subset)
 
-Defined in `yamul-gateway/internal/interfaces/client_connection.go`:
+The read/write-related methods relevant to wire-type handling are defined in `yamul-gateway/internal/interfaces/client_connection.go`:
 
 ```go
 ReadByte() byte
@@ -38,3 +38,5 @@ WriteFixedString(length int, value string)
 
 ReadFixedBytes(length int) []byte
 ```
+
+> **Note:** The full `ClientConnection` interface includes additional methods for connection management, encryption, authentication, and game-service integration. Only the packet read/write methods are shown here.
