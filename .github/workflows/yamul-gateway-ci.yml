@@ -6,8 +6,16 @@ name: yamul-gateway-ci
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'yamul-gateway/**'
+      - 'api-definitions/**'
+      - '.github/workflows/yamul-gateway-ci.yml'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'yamul-gateway/**'
+      - 'api-definitions/**'
+      - '.github/workflows/yamul-gateway-ci.yml'
 
 jobs:
 
