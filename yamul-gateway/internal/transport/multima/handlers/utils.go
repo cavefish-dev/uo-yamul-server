@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"log"
+	"net"
 	"strconv"
 	"strings"
 	"yamul-gateway/internal/dtos/commands"
@@ -11,21 +13,36 @@ import (
 Returns Address in LE, and port number in LE
 */
 func addressToUInt(value string) (uint32, uint16) {
-	parts := strings.Split(value, ":")
-	if len(parts) < 2 {
+	host, portStr, err := net.SplitHostPort(value)
+	if err != nil {
+		log.Printf("addressToUInt: invalid address %q: %v", value, err)
 		return 0, 0
 	}
-	ipTokens := strings.Split(parts[0], ".")
-	if len(ipTokens) != 4 {
+
+	ip := net.ParseIP(host)
+	if ip == nil {
+		log.Printf("addressToUInt: invalid IP %q in address %q", host, value)
 		return 0, 0
 	}
-	var result uint32 = 0
+
+	ip4 := ip.To4()
+	if ip4 == nil {
+		log.Printf("addressToUInt: non-IPv4 address %q (parsed as %v)", host, ip)
+		return 0, 0
+	}
+
+	var result uint32
 	for i := 0; i < 4; i++ {
-		v, _ := strconv.Atoi(ipTokens[i])
-		result = result<<8 | uint32(v)
+		result = result<<8 | uint32(ip4[i])
 	}
-	port, _ := strconv.Atoi(parts[1])
-	return result, uint16(port)
+
+	portUint, err := strconv.ParseUint(portStr, 10, 16)
+	if err != nil {
+		log.Printf("addressToUInt: invalid port %q in address %q: %v", portStr, value, err)
+		return 0, 0
+	}
+
+	return result, uint16(portUint)
 }
 
 func ConvertClientFeaturesToFlags(features commands.ClientFeatures) uint32 {
