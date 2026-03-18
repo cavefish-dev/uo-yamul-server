@@ -138,6 +138,9 @@ func (c *uoClient) ReadCharacterList() (int, error) {
 		return 0, err
 	}
 	length := int(binary.BigEndian.Uint16(lenBuf))
+	if length < 4 {
+		return 0, fmt.Errorf("invalid 0xA9 packet length %d", length)
+	}
 	countBuf := make([]byte, 1)
 	if _, err := io.ReadFull(c.conn, countBuf); err != nil {
 		return 0, err
