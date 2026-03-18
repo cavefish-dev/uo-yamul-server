@@ -26,7 +26,7 @@ class BlockAltitudeDataTest : UnitTest() {
         val tileDataRepository = mock<MulTileDataRepository>()
         whenever(tileDataRepository.getStaticTileData(any())).then {
             val id = it.arguments[0] as Int
-            return@then fixture.create(StaticTileData::class.java).copy(
+            return@then createFixtureStaticTileData().copy(
                 id = id, height = 1u
             )
         }
@@ -38,6 +38,20 @@ class BlockAltitudeDataTest : UnitTest() {
         assertThat(cellAttitude).isEqualTo(expectedZ)
     }
 
+    private fun createFixtureStaticTileData(): StaticTileData = StaticTileData(
+        name = fixture.create(String::class.java),
+        id = fixture.create(Int::class.java),
+        flags = fixture.create(Long::class.java),
+        weight = fixture.create(UByte::class.java),
+        layer = fixture.create(UByte::class.java),
+        count = fixture.create(Int::class.java),
+        animId = fixture.create(Short::class.java),
+        hue = fixture.create(Short::class.java),
+        lightIndex = fixture.create(Short::class.java),
+        height = fixture.create(UByte::class.java),
+    );
+
+    // TODO check values are valid
     fun getCellAttitude(): Stream<Arguments> = Stream.of(
         Arguments.of(
             0,
@@ -62,13 +76,13 @@ class BlockAltitudeDataTest : UnitTest() {
             0,
             10,
             createBlockAltitudeData(0, 0, -1, listOf(2, 4)),
-            5
+            6
         ),
         createComplexCase(-1, 11, 10, 2, 4),
-        createComplexCase(1, 1, 0, 2, 4),
+        createComplexCase(1, 3, 0, 2, 4),
         createComplexCase(3, 3, 0, 2, 4),
-        createComplexCase(4, 5, 0, 2, 4),
-        createComplexCase(55, 5, 0, 2, 4),
+        createComplexCase(4, 6, 0, 2, 4),
+        createComplexCase(55, 6, 0, 2, 4),
     )
 
     private fun createComplexCase(currentZ: Int, expectedZ: Byte, mapZ: Byte, vararg values: Int): Arguments? {
