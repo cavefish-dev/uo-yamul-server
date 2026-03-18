@@ -6,6 +6,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"io"
+	"os"
 	"sync/atomic"
 	backendServices "yamul-gateway/backend/services"
 	"yamul-gateway/internal/interfaces"
@@ -13,18 +14,27 @@ import (
 	"yamul-gateway/internal/services/game/messages"
 )
 
+func gameServiceAddress() string {
+	if addr := os.Getenv("YAMUL_GAME_ADDR"); addr != "" {
+		return addr
+	}
+	return "localhost:8089"
+}
+
 func CreateGameService(connection interfaces.ClientConnection) (interfaces.GameService, error) {
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	dial, err := grpc.Dial("localhost:8089", opts...)
+	dial, err := grpc.Dial(gameServiceAddress(), opts...)
 	if err != nil {
 		return nil, err
 	}
 
 	client := backendServices.NewGameServiceClient(dial)
-	ctx := servicesCommon.GetAuthenticatedContext(context.Background(), connection.GetLoginDetails())
-	stream, err := client.OpenGameStream(ctx)
+	baseCtx := servicesCommon.GetAuthenticatedContext(context.Background(), connection.GetLoginDetails())
+	ctx, cancel := context.WithCancel(baseCtx)
+	stream, err := client.OpenGameStream(ctx, grpc.WaitForReady(true))
 	if err != nil {
+		cancel()
 		_ = dial.Close()
 		return nil, err
 	}
@@ -34,6 +44,7 @@ func CreateGameService(connection interfaces.ClientConnection) (interfaces.GameS
 		stream:            stream,
 		clientConnection:  connection,
 		streamLoopEnabled: atomic.Bool{},
+		cancel:            cancel,
 	}
 	result.streamLoopEnabled.Store(true)
 
@@ -48,6 +59,7 @@ type gameService struct {
 	stream            backendServices.GameService_OpenGameStreamClient
 	clientConnection  interfaces.ClientConnection
 	streamLoopEnabled atomic.Bool
+	cancel            context.CancelFunc
 }
 
 func (s *gameService) Send(_type backendServices.MsgType, message *backendServices.Message) {
@@ -88,6 +100,9 @@ func (s *gameService) streamLoop() {
 }
 
 func (s *gameService) cleanResources() {
+	if s.cancel != nil {
+		s.cancel()
+	}
 	_ = s.dial.Close()
 	s.clientConnection.GetLogger().Info("Game stream closed")
 }

@@ -25,3 +25,16 @@ func Setup() error {
 func Close() {
 	login.Module.Close()
 }
+
+func ResetLoginModule() error {
+	login.Module.Close()
+	if err := login.Module.Setup(); err != nil {
+		log.WithError(err).Fatal("failed to reset login module")
+		return err
+	}
+	return nil
+}
+
+func CloseLoginModule() {
+	login.Module.Close()
+}

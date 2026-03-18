@@ -4,6 +4,7 @@ import (
 	"context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"os"
 	"testing"
 	backendServices "yamul-gateway/backend/services"
 	"yamul-gateway/internal/dtos/commands"
@@ -41,13 +42,22 @@ func MockClose() {
 }
 
 func (m module) Close() {
-	service.close()
+	if service != nil {
+		service.close()
+	}
+}
+
+func loginServiceAddress() string {
+	if addr := os.Getenv("YAMUL_LOGIN_ADDR"); addr != "" {
+		return addr
+	}
+	return "localhost:8087"
 }
 
 func newLoginService() (*LoginService, error) {
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	dial, err := grpc.Dial("localhost:8087", opts...)
+	dial, err := grpc.Dial(loginServiceAddress(), opts...)
 	if err != nil {
 		return nil, err
 	}

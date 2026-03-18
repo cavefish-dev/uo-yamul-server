@@ -2,13 +2,18 @@ package character
 
 import (
 	"context"
+	"fmt"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"os"
+	"time"
 	backendServices "yamul-gateway/backend/services"
 	"yamul-gateway/internal/dtos/commands"
 	"yamul-gateway/internal/interfaces"
 	servicesCommon "yamul-gateway/internal/services/common"
 )
+
+const maxCharacters = 5
 
 type CharacterService struct {
 	dial       *grpc.ClientConn
@@ -21,13 +26,18 @@ func (s CharacterService) Close() {
 }
 
 func (s CharacterService) GetCharacters() ([]commands.CharacterLogin, int, error) {
-	ctx := servicesCommon.GetAuthenticatedContext(context.Background(), s.connection.GetLoginDetails())
-	response, err := s.client.GetCharacterList(ctx, &backendServices.Empty{})
+	baseCtx := servicesCommon.GetAuthenticatedContext(context.Background(), s.connection.GetLoginDetails())
+	ctx, cancel := context.WithTimeout(baseCtx, 5*time.Second)
+	defer cancel()
+	response, err := s.client.GetCharacterList(ctx, &backendServices.Empty{}, grpc.WaitForReady(true))
 	if err != nil {
 		return nil, 0, err
 	}
 	lastValidCharacter := len(response.CharacterLogins) - 1
-	result := make([]commands.CharacterLogin, 5)
+	if len(response.CharacterLogins) > maxCharacters {
+		return nil, 0, fmt.Errorf("backend returned %d characters, but only %d are supported", len(response.CharacterLogins), maxCharacters)
+	}
+	result := make([]commands.CharacterLogin, maxCharacters)
 
 	for i := 0; i <= lastValidCharacter; i++ {
 		result[i].Name = response.CharacterLogins[i].Username
@@ -41,10 +51,17 @@ func (s CharacterService) GetCharacters() ([]commands.CharacterLogin, int, error
 	return result, lastValidCharacter, nil
 }
 
+func characterServiceAddress() string {
+	if addr := os.Getenv("YAMUL_CHARACTER_ADDR"); addr != "" {
+		return addr
+	}
+	return "localhost:8088"
+}
+
 func NewCharacterService(connection interfaces.ClientConnection) (*CharacterService, error) {
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	dial, err := grpc.Dial("localhost:8088", opts...)
+	dial, err := grpc.Dial(characterServiceAddress(), opts...)
 	if err != nil {
 		return nil, err
 	}
