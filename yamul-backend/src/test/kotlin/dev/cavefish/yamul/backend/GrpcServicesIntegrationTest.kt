@@ -17,6 +17,7 @@ import io.grpc.StatusRuntimeException
 import io.grpc.inprocess.InProcessChannelBuilder
 import io.grpc.inprocess.InProcessServerBuilder
 import org.assertj.core.api.Assertions.assertThat
+import java.util.concurrent.TimeUnit
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -58,10 +59,22 @@ class GrpcServicesIntegrationTest : IntegrationTest() {
 
     @AfterEach
     fun tearDown() {
-        loginChannel.shutdownNow()
-        loginServer.shutdownNow()
-        characterChannel.shutdownNow()
-        characterServer.shutdownNow()
+        if (::loginChannel.isInitialized) {
+            loginChannel.shutdownNow()
+            loginChannel.awaitTermination(5, TimeUnit.SECONDS)
+        }
+        if (::loginServer.isInitialized) {
+            loginServer.shutdownNow()
+            loginServer.awaitTermination(5, TimeUnit.SECONDS)
+        }
+        if (::characterChannel.isInitialized) {
+            characterChannel.shutdownNow()
+            characterChannel.awaitTermination(5, TimeUnit.SECONDS)
+        }
+        if (::characterServer.isInitialized) {
+            characterServer.shutdownNow()
+            characterServer.awaitTermination(5, TimeUnit.SECONDS)
+        }
     }
 
     @Test
