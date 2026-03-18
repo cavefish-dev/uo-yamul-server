@@ -56,7 +56,7 @@ jobs:
     - name: Clone MUL files
       if: steps.cache-mul-files.outputs.cache-hit != 'true'
       working-directory: ${{ github.workspace }}
-      run: git clone --depth=1 https://cavefish:${{ secrets.GH_TOKEN }}@github.com/${{ secrets.MUL_FILES_REPO_URL }}.git uo-server-mul-files
+      run: git clone --depth=1 https://cavefish:${{ secrets.PAT }}@github.com/${{ secrets.MUL_FILES_REPO_URL }}.git uo-server-mul-files
 
     - name: Pull latest MUL files
       if: steps.cache-mul-files.outputs.cache-hit == 'true'
