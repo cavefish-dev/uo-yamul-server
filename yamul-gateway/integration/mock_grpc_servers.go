@@ -4,6 +4,7 @@ package integration
 
 import (
 	"context"
+	"fmt"
 	"net"
 	"strings"
 	"testing"
@@ -60,7 +61,12 @@ func (m *mockGameServer) OpenGameStream(stream services.GameService_OpenGameStre
 				errCh <- err
 				return
 			}
-			m.Received <- pkg
+			select {
+			case m.Received <- pkg:
+			default:
+				errCh <- fmt.Errorf("mockGameServer: Received channel is full, cannot forward incoming package")
+				return
+			}
 		}
 	}()
 	for {
