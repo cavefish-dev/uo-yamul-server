@@ -32,10 +32,10 @@ func CreateGameService(connection interfaces.ClientConnection) (interfaces.GameS
 
 	client := backendServices.NewGameServiceClient(dial)
 	baseCtx := servicesCommon.GetAuthenticatedContext(context.Background(), connection.GetLoginDetails())
-	ctx, cancel := context.WithTimeout(baseCtx, 30*time.Second)
-	defer cancel()
+	ctx, cancel := context.WithCancel(baseCtx)
 	stream, err := client.OpenGameStream(ctx, grpc.WaitForReady(true))
 	if err != nil {
+		cancel()
 		_ = dial.Close()
 		return nil, err
 	}
@@ -45,6 +45,7 @@ func CreateGameService(connection interfaces.ClientConnection) (interfaces.GameS
 		stream:            stream,
 		clientConnection:  connection,
 		streamLoopEnabled: atomic.Bool{},
+		cancel:            cancel,
 	}
 	result.streamLoopEnabled.Store(true)
 
@@ -59,6 +60,7 @@ type gameService struct {
 	stream            backendServices.GameService_OpenGameStreamClient
 	clientConnection  interfaces.ClientConnection
 	streamLoopEnabled atomic.Bool
+	cancel            context.CancelFunc
 }
 
 func (s *gameService) Send(_type backendServices.MsgType, message *backendServices.Message) {
@@ -99,6 +101,9 @@ func (s *gameService) streamLoop() {
 }
 
 func (s *gameService) cleanResources() {
+	if s.cancel != nil {
+		s.cancel()
+	}
 	_ = s.dial.Close()
 	s.clientConnection.GetLogger().Info("Game stream closed")
 }
