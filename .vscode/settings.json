@@ -14,5 +14,5 @@
     "files.associations": {
         "*.proto": "proto3"
     },
-    "cmake.sourceDirectory": "C:/Users/cavef/Documents/GitHub/uo-yamul-server/yamul-dashboard/windows"
+    "cmake.sourceDirectory": "${workspaceFolder}/yamul-dashboard/windows"
 }
