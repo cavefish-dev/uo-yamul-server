@@ -5,6 +5,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"os"
+	"time"
 	backendServices "yamul-gateway/backend/services"
 	"yamul-gateway/internal/dtos/commands"
 	"yamul-gateway/internal/interfaces"
@@ -22,7 +23,9 @@ func (s CharacterService) Close() {
 }
 
 func (s CharacterService) GetCharacters() ([]commands.CharacterLogin, int, error) {
-	ctx := servicesCommon.GetAuthenticatedContext(context.Background(), s.connection.GetLoginDetails())
+	baseCtx := servicesCommon.GetAuthenticatedContext(context.Background(), s.connection.GetLoginDetails())
+	ctx, cancel := context.WithTimeout(baseCtx, 5*time.Second)
+	defer cancel()
 	response, err := s.client.GetCharacterList(ctx, &backendServices.Empty{}, grpc.WaitForReady(true))
 	if err != nil {
 		return nil, 0, err
