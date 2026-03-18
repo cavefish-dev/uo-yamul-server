@@ -8,8 +8,6 @@
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(wc:*)",
       "WebFetch(domain:github.com)",
-      "Bash(grep -E '\\\\.\\(sh|ps1|bat\\)$')",
-      "Bash(grep -l \"TODO\\\\|FIXME\\\\|XXX\\\\|HACK\\\\|unimplemented\\\\|Unimplemented\" internal/transport/multima/handlers/*.go)",
       "Bash(go build:*)",
       "Bash(go test:*)",
       "Bash(go clean:*)",

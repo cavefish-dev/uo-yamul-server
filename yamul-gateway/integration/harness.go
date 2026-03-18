@@ -39,7 +39,27 @@ func newGatewayHarness(t *testing.T) *gatewayHarness {
 	}
 	t.Cleanup(autoconfig.CloseLoginModule)
 
-	serverConn, clientConn := net.Pipe()
+	listener, err := net.Listen("tcp", "127.0.0.1:0")
+	if err != nil {
+		t.Fatalf("net.Listen: %v", err)
+	}
+	t.Cleanup(func() { _ = listener.Close() })
+
+	var serverConn net.Conn
+	connCh := make(chan net.Conn, 1)
+	go func() {
+		c, err := listener.Accept()
+		if err == nil {
+			connCh <- c
+		}
+	}()
+
+	clientConn, err := net.Dial("tcp", listener.Addr().String())
+	if err != nil {
+		t.Fatalf("net.Dial: %v", err)
+	}
+	serverConn = <-connCh
+
 	t.Cleanup(func() {
 		_ = serverConn.Close()
 		_ = clientConn.Close()
