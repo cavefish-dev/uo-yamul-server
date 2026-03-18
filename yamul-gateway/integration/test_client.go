@@ -66,6 +66,9 @@ func (c *uoClient) ReadServerList() (int, error) {
 		return 0, err
 	}
 	length := int(binary.BigEndian.Uint16(lenBuf))
+	if length < 3 {
+		return 0, fmt.Errorf("malformed 0xA8 response: length %d too small", length)
+	}
 	// remaining: flags(1) + count(2) + server data
 	rest := make([]byte, length-3)
 	if _, err := io.ReadFull(c.conn, rest); err != nil {
