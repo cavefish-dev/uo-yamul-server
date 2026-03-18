@@ -14,7 +14,7 @@
       "Bash(go test:*)",
       "Bash(GRPC_GO_LOG_VERBOSITY_LEVEL=99 GRPC_GO_LOG_SEVERITY_LEVEL=INFO go test:*)",
       "Bash(go clean:*)",
-      "Bash(GRPC_GO_LOG_VERBOSITY_LEVEL=99 GRPC_GO_LOG_SEVERITY_LEVEL=info go test -tags integration -v -timeout 30s ./integration/...)"
+      "Bash(bash *run-tests.sh*)"
     ]
   }
 }
