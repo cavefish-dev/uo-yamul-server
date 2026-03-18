@@ -7,7 +7,7 @@ import (
 	"yamul-gateway/utils/stringUtils"
 )
 
-func gameServerLogin(client interfaces.ClientConnection) { // 0xA0
+func gameServerLogin(client interfaces.ClientConnection) { // 0x91
 	encryptionKey := client.ReadUInt()
 	username := stringUtils.TrimRight(client.ReadFixedString(30))
 	password := stringUtils.TrimRight(client.ReadFixedString(30))
