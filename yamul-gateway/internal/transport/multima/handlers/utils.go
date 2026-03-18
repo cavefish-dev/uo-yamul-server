@@ -14,20 +14,17 @@ Returns Address in LE, and port number in LE
 func addressToUInt(value string) (uint32, uint16) {
 	host, portStr, err := net.SplitHostPort(value)
 	if err != nil {
-		log.Printf("addressToUInt: invalid address %q: %v", value, err)
-		return 0, 0
+		log.Panicf("addressToUInt: invalid address %q: %v", value, err)
 	}
 
 	ip := net.ParseIP(host)
 	if ip == nil {
-		log.Printf("addressToUInt: invalid IP %q in address %q", host, value)
-		return 0, 0
+		log.Panicf("addressToUInt: invalid IP %q in address %q", host, value)
 	}
 
 	ip4 := ip.To4()
 	if ip4 == nil {
-		log.Printf("addressToUInt: non-IPv4 address %q (parsed as %v)", host, ip)
-		return 0, 0
+		log.Panicf("addressToUInt: non-IPv4 address %q (parsed as %v)", host, ip)
 	}
 
 	var result uint32
@@ -37,8 +34,7 @@ func addressToUInt(value string) (uint32, uint16) {
 
 	portUint, err := strconv.ParseUint(portStr, 10, 16)
 	if err != nil {
-		log.Printf("addressToUInt: invalid port %q in address %q: %v", portStr, value, err)
-		return 0, 0
+		log.Panicf("addressToUInt: invalid port %q in address %q: %v", portStr, value, err)
 	}
 
 	return result, uint16(portUint)
