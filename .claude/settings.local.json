@@ -14,7 +14,9 @@
       "Bash(bash *run-tests.sh*)",
       "Edit(**/*.go)",
       "Bash(./gradlew test:*)",
-      "Bash(./gradlew dependencies:*)"
+      "Bash(./gradlew dependencies:*)",
+      "Bash(./gradlew build:*)",
+      "Bash(./gradlew compileKotlin compileJava)"
     ]
   }
 }
