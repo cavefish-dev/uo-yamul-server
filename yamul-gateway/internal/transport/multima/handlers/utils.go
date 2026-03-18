@@ -4,7 +4,6 @@ import (
 	"log"
 	"net"
 	"strconv"
-	"strings"
 	"yamul-gateway/internal/dtos/commands"
 )
 
