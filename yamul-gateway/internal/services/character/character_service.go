@@ -2,6 +2,7 @@ package character
 
 import (
 	"context"
+	"fmt"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"os"
@@ -11,6 +12,8 @@ import (
 	"yamul-gateway/internal/interfaces"
 	servicesCommon "yamul-gateway/internal/services/common"
 )
+
+const maxCharacters = 5
 
 type CharacterService struct {
 	dial       *grpc.ClientConn
@@ -31,7 +34,10 @@ func (s CharacterService) GetCharacters() ([]commands.CharacterLogin, int, error
 		return nil, 0, err
 	}
 	lastValidCharacter := len(response.CharacterLogins) - 1
-	result := make([]commands.CharacterLogin, 5)
+	if len(response.CharacterLogins) > maxCharacters {
+		return nil, 0, fmt.Errorf("backend returned %d characters, but only %d are supported", len(response.CharacterLogins), maxCharacters)
+	}
+	result := make([]commands.CharacterLogin, maxCharacters)
 
 	for i := 0; i <= lastValidCharacter; i++ {
 		result[i].Name = response.CharacterLogins[i].Username
