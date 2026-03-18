@@ -39,7 +39,12 @@ func TestFullLoginFlow(t *testing.T) {
 	require.NoError(t, c.SendPreLogin("testchar", "", 0, encKey))
 
 	// Mock backend receives character selection message
-	pkg := <-h.backend.Game.Received
+	var pkg *services.StreamPackage
+	select {
+	case pkg = <-h.backend.Game.Received:
+	case <-time.After(5 * time.Second):
+		require.FailNow(t, "timeout waiting for character selection message from backend")
+	}
 	assert.Equal(t, services.MsgType_TypeCharacterSelection, pkg.Type)
 
 	// Backend sends game start
