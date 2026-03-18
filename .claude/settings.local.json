@@ -12,7 +12,9 @@
       "Bash(go test:*)",
       "Bash(go clean:*)",
       "Bash(bash *run-tests.sh*)",
-      "Edit(**/*.go)"
+      "Edit(**/*.go)",
+      "Bash(./gradlew test:*)",
+      "Bash(./gradlew dependencies:*)"
     ]
   }
 }
