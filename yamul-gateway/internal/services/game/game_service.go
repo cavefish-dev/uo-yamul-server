@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"sync/atomic"
+	"time"
 	backendServices "yamul-gateway/backend/services"
 	"yamul-gateway/internal/interfaces"
 	servicesCommon "yamul-gateway/internal/services/common"
@@ -30,7 +31,9 @@ func CreateGameService(connection interfaces.ClientConnection) (interfaces.GameS
 	}
 
 	client := backendServices.NewGameServiceClient(dial)
-	ctx := servicesCommon.GetAuthenticatedContext(context.Background(), connection.GetLoginDetails())
+	baseCtx := servicesCommon.GetAuthenticatedContext(context.Background(), connection.GetLoginDetails())
+	ctx, cancel := context.WithTimeout(baseCtx, 30*time.Second)
+	defer cancel()
 	stream, err := client.OpenGameStream(ctx, grpc.WaitForReady(true))
 	if err != nil {
 		_ = dial.Close()
