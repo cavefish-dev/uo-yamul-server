@@ -5,8 +5,8 @@ class YamulLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Placeholder(
-      child: const Text('Loading'),
+    return const Placeholder(
+      child: Text('Loading'),
     );
   }
 }
