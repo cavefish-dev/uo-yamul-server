@@ -44,7 +44,7 @@ jobs:
     - name: Get MUL files cache key
       id: mul-cache-key
       working-directory: ${{ github.workspace }}
-      run: echo "sha=$(git ls-remote https://${{ secrets.PAT }}:x-oauth-basic@github.com/${{ secrets.MUL_FILES_REPO_URL }}.git HEAD | cut -f1)" >> $GITHUB_OUTPUT
+      run: echo "sha=$(git ls-remote https://cavefish:${{ secrets.PAT }}@github.com/${{ secrets.MUL_FILES_REPO_URL }}.git HEAD | cut -f1)" >> $GITHUB_OUTPUT
 
     - name: Cache MUL files
       id: cache-mul-files
