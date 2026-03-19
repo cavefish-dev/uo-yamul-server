@@ -39,7 +39,15 @@ jobs:
           key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
           restore-keys: ${{ runner.os }}-pub-
 
+      - name: Cache gRPC stubs
+        id: cache-grpc-stubs
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/yamul-dashboard/lib/generated/grpc
+          key: ${{ runner.os }}-grpc-stubs-${{ hashFiles('api-definitions/dashboard/proto/**/*.proto') }}
+
       - name: Generate gRPC stubs
+        if: steps.cache-grpc-stubs.outputs.cache-hit != 'true'
         run: |
           sudo apt-get install -y protobuf-compiler
           dart pub global activate protoc_plugin
@@ -59,4 +67,4 @@ jobs:
         run: flutter build web
 
       - name: Test
-        run: flutter test
+        run: flutter test --platform chrome
