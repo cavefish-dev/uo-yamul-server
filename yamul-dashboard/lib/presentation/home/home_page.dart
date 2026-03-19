@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return YamulAppScaffold(
         title: 'Home',
-        child: YamulWip()
+        child: const YamulWip()
     );
   }
 }

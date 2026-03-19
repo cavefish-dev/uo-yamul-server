@@ -27,7 +27,7 @@ class _MapsPageState extends State<MapsPage> {
             return _buildBody(state);
           case LoadingMapsStateLoading():
           default:
-            return YamulLoading();
+            return const YamulLoading();
         }
       }),
     );

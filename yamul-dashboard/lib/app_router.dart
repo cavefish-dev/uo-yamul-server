@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:uo_yamul_dashboard/domain/repository/auth.dart';
 import 'package:uo_yamul_dashboard/presentation/home/home_page.dart';
 import 'package:uo_yamul_dashboard/presentation/loading_page.dart';
