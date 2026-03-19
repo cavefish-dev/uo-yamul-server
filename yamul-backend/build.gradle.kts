@@ -58,6 +58,18 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    val envFile = file(".env")
+    if (envFile.exists()) {
+        envFile.readLines().forEach { line ->
+            val trimmed = line.trim()
+            if (trimmed.isNotEmpty() && !trimmed.startsWith("#")) {
+                val idx = trimmed.indexOf('=')
+                if (idx > 0) {
+                    environment(trimmed.substring(0, idx).trim(), trimmed.substring(idx + 1).trim())
+                }
+            }
+        }
+    }
 }
 
 kotlin {
