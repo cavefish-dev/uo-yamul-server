@@ -145,9 +145,9 @@ class LocalMulTileDataRepositoryTest : IntegrationTest() {
             ),
         ),
         Arguments.of(
-            45090,
+            43495, // Last "valid" static tile data
             StaticTileData(
-                id = 45090,
+                id = 43495,
                 flags = 0x40,
                 weight = 0xFFu,
                 layer = 0u,
@@ -155,14 +155,14 @@ class LocalMulTileDataRepositoryTest : IntegrationTest() {
                 animId = 0,
                 hue = 0,
                 lightIndex = 0,
-                height = 10u,
-                name = "Zombie Banner East A",
+                height = 1u,
+                name = "Death Memorial East ",
             ),
         ),
         Arguments.of(
-            45091,
+            43496, // First empty tile data
             StaticTileData(
-                id = 45091,
+                id = 43496,
                 flags = 0,
                 weight = 0u,
                 layer = 0u,

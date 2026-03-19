@@ -12,7 +12,14 @@
       "Bash(go test:*)",
       "Bash(go clean:*)",
       "Bash(bash *run-tests.sh*)",
-      "Edit(**/*.go)"
+      "Edit(**/*.go)",
+      "Edit(**/*.java)",
+      "Edit(**/*.kt)",
+      "Edit(**/*.dart)",
+      "Bash(./gradlew test:*)",
+      "Bash(./gradlew dependencies:*)",
+      "Bash(./gradlew build:*)",
+      "Bash(./gradlew compileKotlin compileJava)"
     ]
   }
 }

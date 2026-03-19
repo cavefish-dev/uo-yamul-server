@@ -4,6 +4,8 @@ import dev.cavefish.yamul.IntegrationTest
 import dev.cavefish.yamul.backend.createDifferent
 import dev.cavefish.yamul.backend.createIntRange
 import dev.cavefish.yamul.backend.game.controller.domain.Coordinates
+import dev.cavefish.yamul.backend.game.controller.domain.mul.StaticTileData
+import dev.cavefish.yamul.backend.game.controller.infra.mul.MulTileDataRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
@@ -12,6 +14,8 @@ import org.junit.jupiter.params.provider.MethodSource
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.mockito.kotlin.any
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -20,6 +24,7 @@ import java.util.stream.Stream
 
 private const val BLOCK_SIZE = 196L
 
+@MockBean(MulTileDataRepository::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LocalMulMapBlockRepositoryTest : IntegrationTest() {
 
@@ -32,6 +37,9 @@ class LocalMulMapBlockRepositoryTest : IntegrationTest() {
     @Mock
     lateinit var multimaFileRepository: MultimaFileRepository
 
+    @Mock
+    lateinit var mulTileDataRepository: MulTileDataRepository
+
     @InjectMocks
     lateinit var repository: LocalMulMapBlockRepository
 
@@ -39,6 +47,9 @@ class LocalMulMapBlockRepositoryTest : IntegrationTest() {
     override fun beforeEach() {
         super.beforeEach()
         Mockito.clearInvocations(mapFileReader, staticsFileReader, multimaFileRepository)
+        whenever(mulTileDataRepository.getStaticTileData(any())).thenReturn(
+            StaticTileData(name = "", id = 0, flags = 0, weight = 0u, layer = 0u, count = 0, animId = 0, hue = 0, lightIndex = 0, height = 0u)
+        )
     }
 
     @ParameterizedTest
@@ -124,7 +135,7 @@ class LocalMulMapBlockRepositoryTest : IntegrationTest() {
             Coordinates(
                 x = 0,
                 y = 0,
-                z = 1,
+                z = 2,
                 mapId = 0
             ),
             0L,
@@ -137,7 +148,7 @@ class LocalMulMapBlockRepositoryTest : IntegrationTest() {
             Coordinates(
                 x = 0,
                 y = 0,
-                z = 0,
+                z = 1,
                 mapId = 0
             ),
             0L,
@@ -150,7 +161,7 @@ class LocalMulMapBlockRepositoryTest : IntegrationTest() {
             Coordinates(
                 x = 0,
                 y = 0,
-                z = 12,
+                z = 13,
                 mapId = 0
             ),
             0L,

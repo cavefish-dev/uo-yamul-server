@@ -14,5 +14,6 @@
     "files.associations": {
         "*.proto": "proto3"
     },
-    "cmake.sourceDirectory": "${workspaceFolder}/yamul-dashboard/windows"
+    "cmake.sourceDirectory": "${workspaceFolder}/yamul-dashboard/windows",
+    "java.configuration.updateBuildConfiguration": "automatic"
 }

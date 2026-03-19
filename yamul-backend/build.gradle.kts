@@ -50,6 +50,7 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.26.3")
     testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
     testImplementation("com.flextrade.jfixture:jfixture:2.7.2")
+    testImplementation("io.grpc:grpc-core:$grpcVersion")
 
     implementation("org.tinylog:tinylog-api-kotlin:2.7.0")
     runtimeOnly("org.tinylog:tinylog-impl:2.7.0")
@@ -57,6 +58,19 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    System.getenv("MULTIMA_MULFILES_DIR")?.let { environment("MULTIMA_MULFILES_DIR", it) }
+    val envFile = file(".env")
+    if (envFile.exists()) {
+        envFile.readLines().forEach { line ->
+            val trimmed = line.trim()
+            if (trimmed.isNotEmpty() && !trimmed.startsWith("#")) {
+                val idx = trimmed.indexOf('=')
+                if (idx > 0) {
+                    environment(trimmed.substring(0, idx).trim(), trimmed.substring(idx + 1).trim())
+                }
+            }
+        }
+    }
 }
 
 kotlin {
