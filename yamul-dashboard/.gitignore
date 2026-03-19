@@ -43,4 +43,5 @@ app.*.map.json
 /android/app/release
 
 # Generated gRPC stubs (generated at build time by protoc)
-/lib/generated/grpc/
+/lib/generated/grpc/*.dart
+!/lib/generated/grpc/.keep
