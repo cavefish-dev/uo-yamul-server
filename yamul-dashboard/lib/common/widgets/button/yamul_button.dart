@@ -47,7 +47,7 @@ class YamulButton extends StatelessWidget {
       decoration:
           BoxDecoration(borderRadius: BorderRadius.circular(16), boxShadow: [
         BoxShadow(
-          color: Theme.of(context).colorScheme.inversePrimary.withOpacity(0.8),
+          color: Theme.of(context).colorScheme.inversePrimary.withValues(alpha: 0.8),
           offset: const Offset(0, 5),
           blurRadius: 17,
         )
