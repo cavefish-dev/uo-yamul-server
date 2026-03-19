@@ -94,4 +94,4 @@ protoc --go_out=. --go-grpc_out=. ../api-definitions/backend/*.proto
 
 ## MUL Files
 
-The backend reads Ultima Online's binary MUL data files. The path is configured in `yamul-backend/.env` via the `multima.mulfiles.dir` property. MUL parsing code is under `game/controller/domain/mul/`.
+The backend reads Ultima Online's binary MUL data files. The path is configured in `yamul-backend/.env` via the `MULTIMA_MULFILES_DIR` property. MUL parsing code is under `game/controller/domain/mul/`.

@@ -8,7 +8,7 @@ import io.grpc.Context
 @SuppressWarnings("MagicNumber")
 object Constants {
     val AUTH_CONTEXT_LOGGED_USER: Context.Key<LoggedUser> = Context.key("AUTH_CONTEXT_LOGGED_USER")
-    const val MULTIMA_PATH = "multima.mulfiles.dir"
+    const val MULTIMA_PATH = "MULTIMA_MULFILES_DIR"
     @OptIn(ExperimentalStdlibApi::class)
     val hexNumberFormat = HexFormat {
         upperCase = true

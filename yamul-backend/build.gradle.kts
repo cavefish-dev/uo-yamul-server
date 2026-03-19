@@ -58,6 +58,7 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    System.getenv("MULTIMA_MULFILES_DIR")?.let { environment("MULTIMA_MULFILES_DIR", it) }
     val envFile = file(".env")
     if (envFile.exists()) {
         envFile.readLines().forEach { line ->

@@ -69,4 +69,4 @@ jobs:
     - name: Test
       run: ./gradlew test
       env:
-        'multima.mulfiles.dir': ${{ github.workspace }}/uo-server-mul-files
+        MULTIMA_MULFILES_DIR: ${{ github.workspace }}/uo-server-mul-files
