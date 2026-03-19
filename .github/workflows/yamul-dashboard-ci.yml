@@ -1,0 +1,52 @@
+# This workflow will build a Flutter project
+
+name: yamul-dashboard-ci
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'yamul-dashboard/**'
+      - 'api-definitions/**'
+      - '.github/workflows/yamul-dashboard-ci.yml'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'yamul-dashboard/**'
+      - 'api-definitions/**'
+      - '.github/workflows/yamul-dashboard-ci.yml'
+
+jobs:
+
+  build:
+    defaults:
+      run:
+        working-directory: ./yamul-dashboard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Generate gRPC stubs
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}/api-definitions/dashboard/proto:/proto \
+            -v ${{ github.workspace }}/yamul-dashboard/lib/generated/grpc:/grpc \
+            rvolosatovs/protoc \
+            /proto/*.proto --proto_path=/proto --dart_out=grpc:/grpc/ -Iproto
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Build web
+        run: flutter build web
+
+      - name: Test
+        run: flutter test
