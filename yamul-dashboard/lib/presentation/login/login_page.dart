@@ -66,7 +66,7 @@ class LoginPage extends StatelessWidget {
                   listener: (BuildContext context, AuthState state) {
                     if (state is AuthStateAuthenticated) {
                       log('Redirecting to $redirectTo');
-                      context.router.replaceNamed(this.redirectTo);
+                      context.router.navigatePath(this.redirectTo);
                     }
                   },
                   child: YamulButton(
