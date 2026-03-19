@@ -28,7 +28,7 @@ class AppRouter extends RootStackRouter {
 
   @override
   late final List<AutoRouteGuard> guards = [
-    AutoRouteGuard.simple(this._loggedInGuard)
+    _LoggedInGuard(this),
     // add more guards here
   ];
 
@@ -37,9 +37,14 @@ class AppRouter extends RootStackRouter {
     return AutoRoute(
         page: PageInfo(path, builder: builder), initial: initialRoute);
   }
+}
 
-  Future<void> _loggedInGuard(
-      NavigationResolver resolver, StackRouter router) async {
+class _LoggedInGuard extends AutoRouteGuard {
+  final AppRouter _router;
+  _LoggedInGuard(this._router);
+
+  @override
+  void onNavigation(NavigationResolver resolver, StackRouter router) async {
     if (resolver.routeName == LoginPage.routeName) {
       // Avoids bug of login routing to itself
       if (router.current.name == resolver.routeName) return;
@@ -51,6 +56,6 @@ class AppRouter extends RootStackRouter {
     // TODO add some proper access control
     if (loginInfo != null) return resolver.next();
     log('[${resolver.routeName}] Cannot access. Redirecting to ${LoginPage.routeName}');
-    router.popAndPush(LoginPageRoute(redirectTo: resolver.routeName));
+    _router.popAndPush(LoginPageRoute(redirectTo: resolver.routeName));
   }
 }

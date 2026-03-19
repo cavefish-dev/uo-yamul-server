@@ -11,7 +11,7 @@ class ButtonStateCubit extends Cubit<ButtonState> {
     emit(ButtonLoadingState());
     try {
       var result = await usecase.call(params).timeout(usecase.timeoutDuration);
-
+      if (isClosed) return;
       result.fold((error) {
         emit(ButtonFailureState(error));
       }, (data) {
@@ -19,6 +19,7 @@ class ButtonStateCubit extends Cubit<ButtonState> {
       });
     } catch (e, st) {
       debugPrintStack(stackTrace: st, label: e.toString(), maxFrames: 10);
+      if (isClosed) return;
       emit(ButtonFailureState('Unexpected exception: $e'));
     }
   }
