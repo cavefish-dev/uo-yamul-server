@@ -1,4 +1,6 @@
 analyzer:
+  exclude:
+    - lib/generated/**
   errors:
     unnecessary_this: ignore
 include: package:flutter_lints/flutter.yaml
