@@ -41,11 +41,13 @@ jobs:
 
       - name: Generate gRPC stubs
         run: |
-          docker run --rm \
-            -v ${{ github.workspace }}/api-definitions/dashboard/proto:/proto \
-            -v ${{ github.workspace }}/yamul-dashboard/lib/generated/grpc:/grpc \
-            rvolosatovs/protoc:v7.0.0 \
-            /proto/*.proto --proto_path=/proto --dart_out=grpc:/grpc/ -Iproto
+          sudo apt-get install -y protobuf-compiler
+          dart pub global activate protoc_plugin
+          export PATH="$PATH:$HOME/.pub-cache/bin"
+          protoc \
+            --proto_path=${{ github.workspace }}/api-definitions/dashboard/proto \
+            --dart_out=grpc:${{ github.workspace }}/yamul-dashboard/lib/generated/grpc \
+            ${{ github.workspace }}/api-definitions/dashboard/proto/*.proto
 
       - name: Install dependencies
         run: flutter pub get
