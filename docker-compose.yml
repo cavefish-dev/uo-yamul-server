@@ -18,6 +18,9 @@ services:
       dockerfile: ./backend.Dockerfile
     environment:
       SPRING_PROFILES_ACTIVE: dev
+      MULTIMA_MULFILES_DIR: /mulfiles
+    volumes:
+      - ./mulfiles:/mulfiles
     healthcheck:
       # Uses bash TCP pseudo-device — works on the Corretto/Amazon Linux base without netcat
       test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/8087'"]
