@@ -11,6 +11,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Dashboard** (`yamul-dashboard/`) — Flutter admin UI for game management
 - **Proto definitions** (`api-definitions/`) — Shared Protocol Buffer API contracts
 
+## First-Time Setup
+
+```bash
+git config core.hooksPath .githooks   # enable the pre-push guard on main
+```
+
 ## Build & Test Commands
 
 ### Gateway (Go)
