@@ -18,6 +18,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   void refreshState() async {
     await sl<AuthRepository>().getLoginInfo().then((loginInfo) {
+      if (isClosed) return;
       if (loginInfo != null) {
         emit(AuthStateAuthenticated(loginInfo));
       } else {

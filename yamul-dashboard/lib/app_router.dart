@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:uo_yamul_dashboard/domain/repository/auth.dart';
 import 'package:uo_yamul_dashboard/presentation/home/home_page.dart';
 import 'package:uo_yamul_dashboard/presentation/loading_page.dart';
@@ -28,21 +28,28 @@ class AppRouter extends RootStackRouter {
 
   @override
   late final List<AutoRouteGuard> guards = [
-    AutoRouteGuard.simple(this._loggedInGuard)
+    _LoggedInGuard(this),
     // add more guards here
   ];
 
   AutoRoute _createRoute(String path, Widget Function(RouteData) builder,
       {bool initialRoute = false}) {
+    final cleanPath = path.startsWith('/') ? path.substring(1) : path;
     return AutoRoute(
-        page: PageInfo(path, builder: builder), initial: initialRoute);
+        page: PageInfo(cleanPath, builder: builder), initial: initialRoute);
   }
+}
 
-  Future<void> _loggedInGuard(
-      NavigationResolver resolver, StackRouter router) async {
-    if (resolver.routeName == LoginPage.routeName) {
+class _LoggedInGuard extends AutoRouteGuard {
+  final AppRouter _router;
+  _LoggedInGuard(this._router);
+
+  @override
+  void onNavigation(NavigationResolver resolver, StackRouter router) async {
+    final loginRouteName = LoginPage.routeName.replaceFirst('/', '');
+    if (resolver.routeName == loginRouteName) {
       // Avoids bug of login routing to itself
-      if (router.current.name == resolver.routeName) return;
+      if (router.current.name == loginRouteName) return;
       return resolver.next();
     }
 
@@ -51,6 +58,6 @@ class AppRouter extends RootStackRouter {
     // TODO add some proper access control
     if (loginInfo != null) return resolver.next();
     log('[${resolver.routeName}] Cannot access. Redirecting to ${LoginPage.routeName}');
-    router.popAndPush(LoginPageRoute(redirectTo: resolver.routeName));
+    _router.popAndPush(LoginPageRoute(redirectTo: resolver.routeName));
   }
 }

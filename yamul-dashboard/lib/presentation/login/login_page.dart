@@ -20,8 +20,7 @@ class LoginPage extends StatelessWidget {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  static const routeName = '/login';
-
+  static const routeName = 'login';
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +28,10 @@ class LoginPage extends StatelessWidget {
       showDrawer: false,
       title: 'Login',
       child: YamulButton.createBloc(
-          child: _buildForm(context),
-          onSuccess: (state) => {Navigator.pop(context)},
-          onFailure: (state) => {showWarning(context, state.errorMessage)}),
+        child: _buildForm(context),
+        onSuccess: (state) => {Navigator.pop(context)},
+        onFailure: (state) => {showWarning(context, state.errorMessage)},
+      ),
     );
   }
 
@@ -45,44 +45,46 @@ class LoginPage extends StatelessWidget {
           constraints: BoxConstraints.expand(
             height:
                 Theme.of(context).textTheme.headlineMedium!.fontSize! * 1.1 +
-                    200.0,
-            width: Theme.of(context).textTheme.headlineMedium!.fontSize! * 1.1 +
+                200.0,
+            width:
+                Theme.of(context).textTheme.headlineMedium!.fontSize! * 1.1 +
                 300.0,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              const Text(
-                'Username',
-              ),
+              const Text('Username'),
               _buildUsernameField(usernameController),
-              const Text(
-                'Password',
-              ),
+              const Text('Password'),
               _buildPasswordField(passwordController),
-              Builder(builder: (context) {
-                return BlocListener<AuthCubit, AuthState>(
-                  listener: (BuildContext context, AuthState state) {
-                    if (state is AuthStateAuthenticated) {
-                      log('Redirecting to $redirectTo');
-                      context.router.replaceNamed(this.redirectTo);
-                    }
-                  },
-                  child: YamulButton(
-                    onPressed: () {
-                      var currentState = _formKey.currentState;
-                      if (currentState == null) return;
-                      if (!currentState.validate()) return;
-                      context.read<ButtonStateCubit>().execute(
+              Builder(
+                builder: (context) {
+                  return BlocListener<AuthCubit, AuthState>(
+                    listener: (BuildContext context, AuthState state) {
+                      if (state is AuthStateAuthenticated) {
+                        log('Redirecting to $redirectTo');
+                        context.router.navigatePath(this.redirectTo);
+                      }
+                    },
+                    child: YamulButton(
+                      onPressed: () {
+                        var currentState = _formKey.currentState;
+                        if (currentState == null) return;
+                        if (!currentState.validate()) return;
+                        context.read<ButtonStateCubit>().execute(
                           usecase: sl<AuthLoginUsecase>(),
                           params: AuthLoginParams(
-                              usernameController.text, passwordController.text));
-                    },
-                    title: 'Submit',
-                  ),
-                );
-              }),
+                            usernameController.text,
+                            passwordController.text,
+                          ),
+                        );
+                      },
+                      title: 'Submit',
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),

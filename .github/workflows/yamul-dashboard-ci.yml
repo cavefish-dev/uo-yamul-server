@@ -1,0 +1,70 @@
+# This workflow will build a Flutter project
+
+name: yamul-dashboard-ci
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'yamul-dashboard/**'
+      - 'api-definitions/**'
+      - '.github/workflows/yamul-dashboard-ci.yml'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'yamul-dashboard/**'
+      - 'api-definitions/**'
+      - '.github/workflows/yamul-dashboard-ci.yml'
+
+jobs:
+
+  build:
+    defaults:
+      run:
+        working-directory: ./yamul-dashboard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Cache pub packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: ${{ runner.os }}-pub-
+
+      - name: Cache gRPC stubs
+        id: cache-grpc-stubs
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/yamul-dashboard/lib/generated/grpc
+          key: ${{ runner.os }}-grpc-stubs-${{ hashFiles('api-definitions/dashboard/proto/**/*.proto') }}
+
+      - name: Generate gRPC stubs
+        if: steps.cache-grpc-stubs.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get install -y protobuf-compiler
+          dart pub global activate protoc_plugin
+          export PATH="$PATH:$HOME/.pub-cache/bin"
+          protoc \
+            --proto_path=${{ github.workspace }}/api-definitions/dashboard/proto \
+            --dart_out=grpc:${{ github.workspace }}/yamul-dashboard/lib/generated/grpc \
+            ${{ github.workspace }}/api-definitions/dashboard/proto/*.proto
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Build web
+        run: flutter build web
+
+      - name: Test
+        run: flutter test --platform chrome

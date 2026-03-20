@@ -1,0 +1,24 @@
+FROM debian:bookworm-slim
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# System dependencies + Chromium
+RUN apt-get update -qq && apt-get install -y -qq \
+    curl git unzip xz-utils \
+    chromium \
+    && rm -rf /var/lib/apt/lists/*
+
+# Flutter stable
+RUN git clone --depth 1 --branch stable \
+    https://github.com/flutter/flutter.git /opt/flutter
+ENV PATH="/opt/flutter/bin:$PATH"
+RUN flutter config --no-analytics && flutter precache --web
+
+# Chromium wrapper: --no-sandbox is required in unprivileged Docker containers;
+# --headless avoids needing a display server
+RUN printf '#!/bin/sh\nexec chromium --headless --no-sandbox --disable-gpu "$@"\n' \
+    > /usr/local/bin/chromium-headless \
+    && chmod +x /usr/local/bin/chromium-headless
+ENV CHROME_EXECUTABLE=chromium-headless
+
+WORKDIR /app

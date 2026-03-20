@@ -139,7 +139,7 @@ class YamulDrawerListTile extends StatelessWidget {
   void _navigateTo(String? route, BuildContext context) {
     Navigator.pop(context);
     if (route != null) {
-      context.router.replaceNamed(route);
+      context.router.navigatePath(route);
     }
   }
 
