@@ -51,10 +51,12 @@ Base image: `ghcr.io/cirruslabs/flutter` at a tag whose bundled Dart SDK satisfi
 
 Stage 1 `WORKDIR` is `/app` (the Flutter project root). All paths below are relative to `/app`.
 
-Steps:
-1. Copy `api-definitions/dashboard/proto/` → `/app/proto/`
-2. Install `protoc` and activate `protoc-gen-dart` via `dart pub global activate protoc_plugin` (mirrors what `devBuild.ps1` does)
-3. Run proto generation using absolute paths (consistent with `devBuild.ps1`):
+Steps (order is load-bearing — stubs must be generated after source copy):
+1. Install `protoc` and activate `protoc-gen-dart` via `dart pub global activate protoc_plugin`
+2. Copy `pubspec.yaml` + `pubspec.lock`, run `flutter pub get` (separate cache layer)
+3. Copy remaining Flutter source (`COPY ./yamul-dashboard/ .`)
+4. Copy `api-definitions/dashboard/proto/` → `/app/proto/` (after source copy)
+5. Run proto generation — must be after step 3, because the source copy would overwrite `lib/generated/grpc/` with only the committed `.keep` placeholder:
    ```
    protoc \
      --plugin=protoc-gen-dart=/root/.pub-cache/bin/protoc-gen-dart \
@@ -62,9 +64,8 @@ Steps:
      --dart_out=grpc:/app/lib/generated/grpc \
      /app/proto/*.proto
    ```
-4. Copy `pubspec.yaml` + `pubspec.lock`, run `flutter pub get`
-5. Copy remaining Flutter source, run `flutter build web --release`
-6. Built assets are at `/app/build/web`
+6. Run `flutter build web --release`
+7. Built assets are at `/app/build/web`
 
 The generated stubs (`lib/generated/grpc/`) are not committed to the repo, so the Docker build must produce them.
 
