@@ -7,11 +7,33 @@ services:
       dockerfile: ./gateway.Dockerfile
     ports:
       - "2593:2593"
+
   yamul-backend:
     build:
       context: .
       dockerfile: ./backend.Dockerfile
+    healthcheck:
+      # Uses bash TCP pseudo-device — works on the Corretto/Amazon Linux base without netcat
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/8087'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+
+  yamul-envoy:
+    image: envoyproxy/envoy:v1.31-latest
+    entrypoint: /usr/local/bin/envoy -c /etc/envoy/envoy.yaml --service-cluster proxy
+    volumes:
+      - ./api-definitions/dashboard/envoy.yaml:/etc/envoy/envoy.yaml
+    depends_on:
+      yamul-backend:
+        condition: service_healthy
+
+  yamul-dashboard:
+    build:
+      context: .
+      dockerfile: ./dashboard.Dockerfile
     ports:
-      - "8087:8087"
-      - "8088:8088"
-      - "8089:8089"
+      - "8080:8080"
+    depends_on:
+      - yamul-envoy
