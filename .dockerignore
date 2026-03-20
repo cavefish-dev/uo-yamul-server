@@ -1,2 +1,4 @@
 /yamul-backend/src/test
 /yamul-backend/gradle.properties
+/yamul-dashboard/.dart_tool
+/yamul-dashboard/build
