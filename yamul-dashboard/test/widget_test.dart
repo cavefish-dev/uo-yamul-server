@@ -37,9 +37,13 @@ void main() {
 
   testWidgets('Dashboard smoke test - login page is shown', (tester) async {
     await tester.pumpWidget(MyApp());
-    await tester.pump(); // settle initial frame
+    await tester.pumpAndSettle(); // wait for async guard + navigation to settle
 
     // Login page should be rendered (no valid session → guard redirects to /login)
     expect(find.text('Submit'), findsOneWidget);
+
+    // Drain the 1-second timer in AuthCubit.init() to avoid pending-timer assertion at teardown
+    await tester.pump(const Duration(seconds: 2));
+    await tester.pumpAndSettle();
   });
 }

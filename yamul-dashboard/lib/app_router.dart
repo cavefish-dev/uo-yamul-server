@@ -34,8 +34,9 @@ class AppRouter extends RootStackRouter {
 
   AutoRoute _createRoute(String path, Widget Function(RouteData) builder,
       {bool initialRoute = false}) {
+    final cleanPath = path.startsWith('/') ? path.substring(1) : path;
     return AutoRoute(
-        page: PageInfo(path, builder: builder), initial: initialRoute);
+        page: PageInfo(cleanPath, builder: builder), initial: initialRoute);
   }
 }
 
@@ -45,9 +46,10 @@ class _LoggedInGuard extends AutoRouteGuard {
 
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) async {
-    if (resolver.routeName == LoginPage.routeName) {
+    final loginRouteName = LoginPage.routeName.replaceFirst('/', '');
+    if (resolver.routeName == loginRouteName) {
       // Avoids bug of login routing to itself
-      if (router.current.name == resolver.routeName) return;
+      if (router.current.name == loginRouteName) return;
       return resolver.next();
     }
 
