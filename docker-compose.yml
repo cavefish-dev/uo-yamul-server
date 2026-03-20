@@ -7,11 +7,17 @@ services:
       dockerfile: ./gateway.Dockerfile
     ports:
       - "2593:2593"
+    environment:
+      YAMUL_LOGIN_ADDR: "yamul-backend:8087"
+      YAMUL_CHARACTER_ADDR: "yamul-backend:8088"
+      YAMUL_GAME_ADDR: "yamul-backend:8089"
 
   yamul-backend:
     build:
       context: .
       dockerfile: ./backend.Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
     healthcheck:
       # Uses bash TCP pseudo-device — works on the Corretto/Amazon Linux base without netcat
       test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/8087'"]
