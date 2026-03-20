@@ -1,30 +1,45 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
+import 'package:uo_yamul_dashboard/common/bloc/auth/auth_cubit.dart';
+import 'package:uo_yamul_dashboard/common/bloc/auth/auth_state.dart';
+import 'package:uo_yamul_dashboard/common/bloc/selected_app/loading_maps_cubit.dart';
+import 'package:uo_yamul_dashboard/common/bloc/selected_app/loading_maps_state.dart';
+import 'package:uo_yamul_dashboard/data/models/auth_singin_params.dart';
+import 'package:uo_yamul_dashboard/domain/entities/login_info.dart';
+import 'package:uo_yamul_dashboard/domain/repository/auth.dart';
 import 'package:uo_yamul_dashboard/main.dart';
 
+class _FakeAuthRepository implements AuthRepository {
+  @override
+  Future<Either<String, void>> login(AuthLoginParams params) async =>
+      Right<String, void>(null);
+
+  @override
+  Future<void> logout() async {}
+
+  @override
+  Future<LoginInfo?> getLoginInfo() async => null;
+}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  final sl = GetIt.instance;
+
+  setUp(() {
+    sl.registerSingleton<AuthRepository>(_FakeAuthRepository());
+    sl.registerSingleton(AuthCubit(AuthStateUnknown()));
+    sl.registerSingleton(LoadingMapsCubit(LoadingMapsStateLoading()));
+  });
+
+  tearDown(() async {
+    await sl.reset();
+  });
+
+  testWidgets('Dashboard smoke test - login page is shown', (tester) async {
     await tester.pumpWidget(MyApp());
+    await tester.pump(); // settle initial frame
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Login page should be rendered (no valid session → guard redirects to /login)
+    expect(find.text('Submit'), findsOneWidget);
   });
 }
